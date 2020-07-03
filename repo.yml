@@ -1,0 +1,222 @@
+kind: epiphany-cluster
+title: Epiphany cluster Config
+provider: any
+name: default
+specification:
+  name: centrepo
+  admin_user:
+    name: vagrant
+    key_path: /workspaces/epiphany/core/src/epicli/.ssh/id_rsa_vagrant
+  components:
+    kubernetes_master:
+      count: 0
+      machines:
+      - default-k8s-master1
+    kubernetes_node:
+      count: 0
+      machines:
+      - default-k8s-node1
+      - default-k8s-node2
+    logging:
+      count: 0
+      machines:
+      - default-logging
+    monitoring:
+      count: 0
+      machines:
+      - default-monitoring
+    kafka:
+      count: 0
+      machines:
+      - default-kafka1
+      - default-kafka2
+    postgresql:
+      count: 0
+      machines:
+      - default-postgresql
+    load_balancer:
+      count: 0
+      machines:
+      - default-loadbalancer
+    rabbitmq:
+      count: 0
+      machines:
+      - default-rabbitmq
+    repo_only:
+      count: 1
+      configuration: default
+      machines:
+      - repomachine
+---
+version: 0.7.0
+kind: configuration/feature-mapping
+title: "Feature mapping to roles"
+name: default
+provider: any
+specification:
+  available_roles:
+    - name: repository
+      enabled: yes
+    - name: firewall
+      enabled: yes
+    - name: image-registry
+      enabled: yes
+    - name: kubernetes-master
+      enabled: yes
+    - name: kubernetes-node
+      enabled: yes
+    - name: helm
+      enabled: yes
+    - name: logging
+      enabled: yes
+    - name: opendistro-for-elasticsearch
+      enabled: yes
+    - name: elasticsearch
+      enabled: yes
+    - name: elasticsearch-curator
+      enabled: yes
+    - name: kibana
+      enabled: yes
+    - name: filebeat
+      enabled: yes
+    - name: prometheus
+      enabled: yes
+    - name: grafana
+      enabled: yes
+    - name: node-exporter
+      enabled: yes
+    - name: jmx-exporter
+      enabled: yes
+    - name: zookeeper
+      enabled: yes
+    - name: kafka
+      enabled: yes
+    - name: rabbitmq
+      enabled: yes
+    - name: kafka-exporter
+      enabled: yes
+    - name: postgresql
+      enabled: yes
+    - name: haproxy
+      enabled: yes
+    - name: haproxy-exporter
+      enabled: yes
+    - name: vault
+      enabled: yes
+    - name: applications
+      enabled: yes
+    - name: ignite
+      enabled: yes
+  roles_mapping:
+    kafka:
+      - zookeeper
+      - jmx-exporter
+      - kafka
+      - kafka-exporter
+      - node-exporter
+      - filebeat
+      - firewall
+    rabbitmq:
+      - rabbitmq
+      - node-exporter
+      - filebeat
+      - firewall
+    logging:
+      - logging
+      - kibana
+      - node-exporter
+      - filebeat
+      - firewall
+    load_balancer:
+      - haproxy
+      - haproxy-exporter
+      - node-exporter
+      - filebeat
+      - firewall
+    monitoring:
+      - prometheus
+      - grafana
+      - node-exporter
+      - filebeat
+      - firewall
+    postgresql:
+      - postgresql
+      - node-exporter
+      - filebeat
+      - firewall
+    custom:
+      - repository
+      - image-registry
+      - kubernetes-master
+      - node-exporter
+      - filebeat
+      - rabbitmq
+      - postgresql
+      - prometheus
+      - grafana
+      - node-exporter
+      - logging
+      - firewall
+    single_machine:
+      - repository
+      - image-registry
+      - kubernetes-master
+      - helm
+      - applications
+      - rabbitmq
+      - postgresql
+      - firewall
+    kubernetes_master:
+      - image-registry
+      - kubernetes-master
+      - repository
+      - helm
+      - applications
+      - node-exporter
+      - filebeat
+      - firewall
+      - vault
+    kubernetes_node:
+      - kubernetes-node
+      - node-exporter
+      - filebeat
+      - firewall
+    ignite:
+      - ignite
+      - node-exporter
+      - filebeat
+      - firewall
+    opendistro_for_elasticsearch:
+      - opendistro-for-elasticsearch
+      - node-exporter
+      - filebeat
+      - firewall
+    repo_only:
+      - image-registry
+      - repository
+      - firewall
+---
+kind: configuration/repository
+title: Epiphany requirements repository
+name: default
+specification:
+  description: Local repository of binaries required to install Epiphany
+  download_done_flag_expire_minutes: 120
+  apache_epirepo_path: /var/www/html/epirepo
+  teardown:
+    disable_http_server: false
+    remove:
+      files: false
+      helm_charts: false
+      images: false
+      packages: false
+version: 0.7.0
+provider: any
+---
+kind: infrastructure/machine
+provider: any
+name: repomachine
+specification:
+  hostname: default
+  ip: 172.28.128.11
+version: 0.7.0
