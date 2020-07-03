@@ -9,3 +9,5 @@ This repository contains configuration to prepare Vagrant box containing epiphan
  - `vagrant box add --force vc7e070r vc7e070r.box`
  
 Then you can use it for [vagrant-epiphany-cluster](https://github.com/mkyc/vagrant-epiphany-cluster). 
+
+File [repo.yml](./repo.yml) author is @seriva. 
