@@ -10,4 +10,4 @@ This repository contains configuration to prepare Vagrant box containing epiphan
  
 Then you can use it for [vagrant-epiphany-cluster](https://github.com/mkyc/vagrant-epiphany-cluster). 
 
-File [repo.yml](./repo.yml) author is @seriva. 
+File [repo.yml](./repo.yml) author is [@seriva](https://github.com/seriva). 
